@@ -17,8 +17,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <!-- BELOW PLUGIN GENERATES THE CLIENT JAVA CODE FROM WADL -->
@@ -73,7 +73,7 @@
                         <configuration>
                             <transformers>
                                 <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
@@ -90,7 +90,7 @@
 
     <dependencies>
         <!-- provided -->
-        
+
         <!-- test -->
         <dependency>
             <groupId>junit</groupId>
@@ -98,7 +98,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- pack with -->
         <dependency>
             <groupId>org.zeromq</groupId>
