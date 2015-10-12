@@ -1,4 +1,4 @@
-package com.lambstat;
+package com.lambstat.rws;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;

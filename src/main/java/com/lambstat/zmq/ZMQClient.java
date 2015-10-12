@@ -1,4 +1,4 @@
-package com.lambstat;
+package com.lambstat.zmq;
 
 
 import com.lambstat.core.event.BaseEvent;

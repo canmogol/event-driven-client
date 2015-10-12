@@ -1,4 +1,4 @@
-package com.lambstat;
+package com.lambstat.rws;
 
 import com.lambstat.module.jetty.data.LoginResponse;
 import com.lambstat.module.jetty.resource.JettyResource;
