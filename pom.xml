@@ -9,6 +9,14 @@
     <version>1.0-SNAPSHOT</version>
     <name>event-driven-client</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.generated.code.path>target/generated-sources/src/main/pb</java.generated.code.path>
+        <proto.project.name>event-driven</proto.project.name>
+        <proto.file.path>src/main/resources/proto</proto.file.path>
+        <proto.file.name>LambstatModels.proto</proto.file.name>
+    </properties>
+
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
@@ -21,6 +29,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <!-- BELOW PLUGIN GENERATES THE CLIENT JAVA CODE FROM WADL -->
             <plugin>
                 <groupId>org.apache.cxf</groupId>
@@ -41,6 +50,40 @@
                         </configuration>
                         <goals>
                             <goal>wadl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- GENERATE JAVA AND CPP SOURCES -->
+            <plugin>
+                <groupId>com.google.protobuf.tools</groupId>
+                <artifactId>maven-protoc-plugin</artifactId>
+                <version>0.1.12-SNAPSHOT</version>
+                <configuration>
+                    <protocExecutable>protoc</protocExecutable>
+                    <protoSourceRoot>${project.basedir}/../${proto.project.name}/${proto.file.path}/</protoSourceRoot>
+                    <languageSpecifications>
+                        <LanguageSpecification>
+                            <language>JAVA</language>
+                            <outputDirectory>
+                                ${project.basedir}/${java.generated.code.path}/
+                            </outputDirectory>
+                        </LanguageSpecification>
+                        <LanguageSpecification>
+                            <language>CPP</language>
+                            <outputDirectory>
+                                ${project.basedir}/target/generated-sources/cpp
+                            </outputDirectory>
+                        </LanguageSpecification>
+                    </languageSpecifications>
+                    <protocExecutable>/usr/local/bin/protoc</protocExecutable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -125,6 +168,18 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson-provider</artifactId>
             <version>3.0.11.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.0.0-beta-1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xsom</groupId>
+            <artifactId>xsom</artifactId>
+            <version>20140925</version>
         </dependency>
 
     </dependencies>
