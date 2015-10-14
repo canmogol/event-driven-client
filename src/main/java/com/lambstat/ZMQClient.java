@@ -1,6 +1,7 @@
 package com.lambstat;
 
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.lambstat.model.LambstatModels;
 import org.zeromq.ZMQ;
 
@@ -20,10 +21,22 @@ public class ZMQClient implements Runnable {
                         .setUsername("john")
                         .setPassword("123")
                         .build();
+        System.out.println("sending login request: " + loginRequest.getUsername());
         byte[] bytes = loginRequest.toByteArray();
 
         // send bytes
         socket.send(bytes);
+
+        // get server's response
+        byte[] responseBytes = socket.recv();
+
+        // read login response
+        try {
+            LambstatModels.loginResponse loginResponse = LambstatModels.loginResponse.parseFrom(responseBytes);
+            System.out.println("is logged: " + loginResponse.getLogged());
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }
 
         // close and exit
         socket.close();
