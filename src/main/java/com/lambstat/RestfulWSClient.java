@@ -10,13 +10,37 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
+import javax.ws.rs.client.InvocationCallback;
+
 public class RestfulWSClient implements Runnable {
+
     @Override
     public void run() {
+        ResteasyClient client;
+        ResteasyWebTarget target;
+
+        for (int i = 0; i < 10; i++) {
+            client = new ResteasyClientBuilder().build();
+            target = client.target("http://localhost:8080/").path("/async/ok");
+
+            target.request().async().get(new InvocationCallback<Object>() {
+                @Override
+                public void completed(Object o) {
+                    System.out.println(o);
+                }
+
+                @Override
+                public void failed(Throwable throwable) {
+                    System.out.println(throwable);
+                }
+            });
+
+            System.out.println(i + ". async request");
+        }
 
         // create client proxy
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget target = client.target("http://localhost:8080/");
+        client = new ResteasyClientBuilder().build();
+        target = client.target("http://localhost:8080/");
         UserResource userResource = target.proxy(UserResource.class);
 
         // call with wrong credentials
