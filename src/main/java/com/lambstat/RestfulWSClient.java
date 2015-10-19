@@ -21,12 +21,12 @@ public class RestfulWSClient implements Runnable {
 
         for (int i = 0; i < 10; i++) {
             client = new ResteasyClientBuilder().build();
-            target = client.target("http://localhost:8080/").path("/async/ok");
+            target = client.target("http://localhost:9088/").path("/async/ok");
 
-            target.request().async().get(new InvocationCallback<Object>() {
+            target.request().async().get(new InvocationCallback<LoginResponse>() {
                 @Override
-                public void completed(Object o) {
-                    System.out.println(o);
+                public void completed(LoginResponse loginResponse) {
+                    System.out.println(ToStringBuilder.reflectionToString(loginResponse));
                 }
 
                 @Override
@@ -40,7 +40,7 @@ public class RestfulWSClient implements Runnable {
 
         // create client proxy
         client = new ResteasyClientBuilder().build();
-        target = client.target("http://localhost:8080/");
+        target = client.target("http://localhost:9088/");
         UserResource userResource = target.proxy(UserResource.class);
 
         // call with wrong credentials
@@ -59,7 +59,7 @@ public class RestfulWSClient implements Runnable {
 
         // create client proxy
         client = new ResteasyClientBuilder().build();
-        target = client.target("http://localhost:8080/");
+        target = client.target("http://localhost:9088/");
         CameraResource cameraResource = target.proxy(CameraResource.class);
 
         ShutdownRequest shutdownrequest = new ShutdownRequest();
