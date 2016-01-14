@@ -10,31 +10,46 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.InvocationCallback;
+import javax.ws.rs.core.MediaType;
 
 public class RestfulWSClient implements Runnable {
 
-    @Override
     public void run() {
+        // define client and target
         ResteasyClient client;
         ResteasyWebTarget target;
 
+        // create 10 async requests
         for (int i = 0; i < 10; i++) {
+            // create client and target for each async request
             client = new ResteasyClientBuilder().build();
             target = client.target("http://localhost:8080/").path("/async/ok");
 
-            target.request().async().get(new InvocationCallback<Object>() {
-                @Override
-                public void completed(Object o) {
-                    System.out.println(o);
-                }
+            // create request object
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.setUsername("john");
+            loginRequest.setPassword("123");
 
-                @Override
-                public void failed(Throwable throwable) {
-                    System.out.println(throwable);
-                }
-            });
+            // do async request with this request object
+            target.request().async().post(
+                    Entity.entity(loginRequest, MediaType.APPLICATION_JSON),
+                    new InvocationCallback<LoginResponse>() {
+                        @Override
+                        public void completed(LoginResponse loginResponse) {
+                            // this is the response,
+                            // and it will be called when the server sends response
+                            System.out.println(ToStringBuilder.reflectionToString(loginResponse));
+                        }
 
+                        @Override
+                        public void failed(Throwable throwable) {
+                            // if any error / exception occurs, like 405 method allowed message
+                            System.out.println("Exception: " + throwable.getMessage());
+                        }
+                    });
+            // these 10 logs will be written immediately
             System.out.println(i + ". async request");
         }
 
