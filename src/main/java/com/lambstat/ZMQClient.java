@@ -22,9 +22,10 @@ public class ZMQClient implements Runnable {
                         .setPassword("123")
                         .build();
         System.out.println("sending login request: " + loginRequest.getUsername());
-        byte[] bytes = loginRequest.toByteArray();
+        byte[] bytes =  loginRequest.toByteArray();
 
         // send bytes
+        socket.send("LOGIN_REQUEST", ZMQ.SNDMORE);
         socket.send(bytes);
 
         // get server's response

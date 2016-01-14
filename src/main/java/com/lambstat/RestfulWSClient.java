@@ -31,7 +31,7 @@ public class RestfulWSClient implements Runnable {
 
                 @Override
                 public void failed(Throwable throwable) {
-                    System.out.println(throwable);
+                    System.out.println("" + throwable);
                 }
             });
 
